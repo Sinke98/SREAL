@@ -16,7 +16,7 @@ int main(){
   char t0, t1, t2, t3;
   size_t br_bajtova = 6;
   float procenat = 0;
-  long int perioda = 20000L;
+  int perioda = 20000;
 
   // Glavni deo
 
@@ -62,10 +62,10 @@ int main(){
       return -1;
     }
 
-    t0 = str[2] - '0';
-    t1 = str[3] - '0';
-    t2 = str[4] - '0';
-    t3 = str[5] - '0';  
+    t3 = str[2] - '0';
+    t2 = str[3] - '0';
+    t1 = str[4] - '0';
+    t0 = str[5] - '0';  
     
     free(str);
 
@@ -74,7 +74,68 @@ int main(){
     // Ako je prekidac "SW0" aktivan
     if(pr1 == 1){
 
-      f_ledovke = fopen("/dev/led", "w");
+		printf("Procenat je : %f", procenat);
+
+      // Ako je taster "BTN0" aktivan
+      if(t0 == 1 && pritisnut1 == 0){
+     	  
+		  printf("Pritisnut taster 0");   
+        pritisnut1 = 1;
+
+        // Povecanje faktora ispune za 20%
+        procenat += 0.2;
+
+		  printf("Procenat je : %f", procenat);
+      }
+		  
+      if(t0 == 0){
+        
+        pritisnut1 = 0;
+
+      }
+
+      // Ako je taster "BTN1" aktivan
+      if(t1 == 1 && pritisnut2 == 0){
+  		  
+        pritisnut2 = 1;
+
+          // Smanjenje faktora ispune za 20%
+          procenat -= 0.2;
+
+			 printf("Procenat je : %f", procenat);
+      }
+
+      if(t1 == 0){
+        
+        pritisnut2 = 0;
+      }  
+      // Ako je pritisnut taster "BTN2"
+      if(t2 == 1){
+     		
+        // Postavi faktor ispune na 0%
+        procenat = 0;
+		  
+		  printf("Procenat je : %f", procenat);
+      }
+      // Ako je taster "BTN3" aktivan
+      if(t3 == 1){
+        
+        // Postavi faktor ispune na 100%
+        procenat = 1;
+
+		  printf("Procenat je : %f", procenat);
+      }
+
+		if(procenat < 0){
+			procenat = 0;
+		}
+
+		if(procenat > 1){
+			procenat = 1;
+		}
+
+
+      f_ledovke = fopen("/dev/led","w");
 
       if(f_ledovke == NULL){
         puts("Problem pri otvaranju /dev/led");
@@ -83,62 +144,30 @@ int main(){
 
       fputs("0xf\n",f_ledovke);
 
-      // Ako je taster "BTN0" aktivan
-      if(t0 == 1 && pritisnut1 == 0){
-        
-        pritisnut1 = 1;
-
-        if(pritisnut1 == 1){
-
-          // Povecanje faktora ispune za 20%
-          procenat += 0.2;
-        }
-      }  
-      // Ako je taster "BTN1" aktivan
-      if(t1 == 1 && pritisnut2 == 0){
-        
-        pritisnut2 = 1;
-
-        if(pritisnut2 == 1){
-
-          // Smanjenje faktora ispune za 20%
-          procenat -= 0.2;
-        }
-      }
-      // Ako je pritisnut taster "BTN2"
-      if(t2 == 1){
-     
-        // Postavi faktor ispune na 0%
-        procenat = 0;
-      }
-      // Ako je taster "BTN3" aktivan
-      if(t3 == 1){
-       
-        // Postavi faktor ispune na 100%
-        procenat = 1;
-      }
-
       usleep(procenat*perioda);
 
+    	if(fclose(f_ledovke)){
+      	puts("Problem pri zatvaranju /dev/button");
+      	return -1;
+    	}
+		
+		
+      f_ledovke = fopen("/dev/led","w");
+		
       fputs("0x0\n",f_ledovke);
+
+
+      if(f_ledovke == NULL){
+        puts("Problem pri otvaranju /dev/led");
+        return -1;
+      }
 
       if(fclose(f_ledovke)){
         puts("Problem pri zatvaranju /dev/led");
         return -1;
       }
 
-      usleep((1-procenat)*perioda);
-
-      if(t0 == 0){
-        
-        pritisnut1 = 0;
-      }
-
-      if(t1 == 0){
-        
-        pritisnut2 = 0;
-      }  
-
+      	usleep((1-procenat)*perioda);
     }
       
   }
