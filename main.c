@@ -145,7 +145,7 @@ int main(){
 		
       f_ledovke = fopen("/dev/led","w");
 		
-      fputs("0x0F\n",f_ledovke);
+      fputs("0x00\n",f_ledovke);
 
       if(f_ledovke == NULL){
         puts("Problem pri otvaranju /dev/led");
