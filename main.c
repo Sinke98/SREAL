@@ -74,18 +74,15 @@ int main(){
     // Ako je prekidac "SW0" aktivan
     if(pr1 == 1){
 
-		printf("Procenat je : %f", procenat);
+		  printf("Procenat je : %f", procenat);
 
       // Ako je taster "BTN0" aktivan
       if(t0 == 1 && pritisnut1 == 0){
      	  
-		  printf("Pritisnut taster 0");   
         pritisnut1 = 1;
 
         // Povecanje faktora ispune za 20%
         procenat += 0.2;
-
-		  printf("Procenat je : %f", procenat);
       }
 		  
       if(t0 == 0){
@@ -97,12 +94,10 @@ int main(){
       // Ako je taster "BTN1" aktivan
       if(t1 == 1 && pritisnut2 == 0){
   		  
-        pritisnut2 = 1;
+          pritisnut2 = 1;
 
           // Smanjenje faktora ispune za 20%
           procenat -= 0.2;
-
-			 printf("Procenat je : %f", procenat);
       }
 
       if(t1 == 0){
@@ -114,27 +109,24 @@ int main(){
      		
         // Postavi faktor ispune na 0%
         procenat = 0;
-		  
-		  printf("Procenat je : %f", procenat);
       }
       // Ako je taster "BTN3" aktivan
       if(t3 == 1){
         
         // Postavi faktor ispune na 100%
         procenat = 1;
-
-		  printf("Procenat je : %f", procenat);
       }
 
-		if(procenat < 0){
-			procenat = 0;
-		}
+		  if(procenat < 0){
+			  procenat = 0;
+		  }
 
-		if(procenat > 1){
-			procenat = 1;
-		}
+		  if(procenat > 1){
+			  procenat = 1;
+		  }
 
-
+		  printf("Procenat je : %f", procenat);
+    
       f_ledovke = fopen("/dev/led","w");
 
       if(f_ledovke == NULL){
@@ -142,20 +134,18 @@ int main(){
         return -1;
       }
 
-      fputs("0xf\n",f_ledovke);
-
-      usleep(procenat*perioda);
+      fputs("0x0F\n",f_ledovke);
 
     	if(fclose(f_ledovke)){
       	puts("Problem pri zatvaranju /dev/button");
       	return -1;
     	}
-		
+
+      usleep(procenat*perioda);
 		
       f_ledovke = fopen("/dev/led","w");
 		
-      fputs("0x0\n",f_ledovke);
-
+      fputs("0x0F\n",f_ledovke);
 
       if(f_ledovke == NULL){
         puts("Problem pri otvaranju /dev/led");
@@ -167,7 +157,7 @@ int main(){
         return -1;
       }
 
-      	usleep((1-procenat)*perioda);
+      usleep((1-procenat)*perioda);
     }
       
   }
