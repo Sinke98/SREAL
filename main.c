@@ -16,7 +16,7 @@ int main(){
   char t0, t1, t2, t3;
   size_t br_bajtova = 6;
   float procenat = 0;
-  int perioda = 20000;
+  long int perioda = 20000L;
 
   // Glavni deo
 
@@ -27,7 +27,7 @@ int main(){
     f_prekidac = fopen("/dev/switch", "r");
 
     if(f_prekidac == NULL){
-      puts("Problem pri otvaranju /dev/switch");
+      printf("Problem pri otvaranju /dev/switch\n");
       return -1;  
     }
   
@@ -36,7 +36,7 @@ int main(){
     getline(&str,&br_bajtova,f_prekidac);
 
     if(fclose(f_prekidac)){
-      puts("Problem pri zatvaranju /dev/switch");
+      printf("Problem pri zatvaranju /dev/switch\n");
       return -1;
     }
 
@@ -49,7 +49,7 @@ int main(){
     f_tasteri = fopen("/dev/button", "r");
 
     if(f_tasteri == NULL){
-      puts("Problem pri otvaranju /dev/button");
+      printf("Problem pri otvaranju /dev/button\n");
       return -1;
     }
 
@@ -58,7 +58,7 @@ int main(){
     getline(&str,&br_bajtova,f_tasteri);
 
     if(fclose(f_tasteri)){
-      puts("Problem pri zatvaranju /dev/button");
+      printf("Problem pri zatvaranju /dev/button\n");
       return -1;
     }
 
@@ -130,14 +130,14 @@ int main(){
       f_ledovke = fopen("/dev/led","w");
 
       if(f_ledovke == NULL){
-        puts("Problem pri otvaranju /dev/led");
+        printf("Problem pri otvaranju /dev/led\n");
         return -1;
       }
 
       fputs("0x0F\n",f_ledovke);
 
     	if(fclose(f_ledovke)){
-      	puts("Problem pri zatvaranju /dev/button");
+      	printf("Problem pri zatvaranju /dev/button\n");
       	return -1;
     	}
 
@@ -146,14 +146,14 @@ int main(){
       f_ledovke = fopen("/dev/led","w");
 		
       if(f_ledovke == NULL){
-        puts("Problem pri otvaranju /dev/led");
+        printf("Problem pri otvaranju /dev/led\n");
         return -1;
       }
 
       fputs("0x00\n",f_ledovke);
 
       if(fclose(f_ledovke)){
-        puts("Problem pri zatvaranju /dev/led");
+        printf("Problem pri zatvaranju /dev/led\n");
         return -1;
       }
 
